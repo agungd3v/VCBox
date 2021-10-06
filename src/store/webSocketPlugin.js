@@ -49,7 +49,7 @@ export default function webSocketPlugin (socket) {
           background: 'bg-red-500'
         }))
       }
-      console.error(payload)
+      // console.error(payload)
     })
   }
 }
