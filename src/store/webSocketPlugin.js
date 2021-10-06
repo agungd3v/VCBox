@@ -5,8 +5,8 @@ export default function webSocketPlugin (socket) {
     socket.on('connect', () => store.dispatch('setLoader', false))
 
     socket.on("logreg", payload => {
+      store.dispatch('setLoader', false)
       if (payload.status) {
-        store.dispatch('setLoader', false)
         console.log(payload)
       } else {
         console.error(payload)
