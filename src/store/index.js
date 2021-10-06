@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import webSocketPlugin from './webSocketPlugin'
+import socket from '../plugins/socket'
 
 Vue.use(Vuex)
+const webSocket = webSocketPlugin(socket)
 
 export default new Vuex.Store({
+  plugins: [webSocket],
   state: {
     user: null,
     token: null,

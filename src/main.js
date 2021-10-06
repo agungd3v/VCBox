@@ -6,6 +6,10 @@ Vue.config.productionTip = false
 
 // Initialize plugins
 import './plugins/axios'
+import socket from './plugins/socket'
+
+// Initialize prototype
+Vue.prototype.$socket = socket
 
 new Vue({
   store,

@@ -15,7 +15,7 @@
       <div class="mt-5">
         <h5 class="font-semibold mb-2">Disclaimer 🙈</h5>
         <p class="text-sm text-gray-500">
-          All the materials on ChatBox’s Website are provided "as is". ChatBox makes no warranties, may it be expressed or implied, therefore negates all other warranties. Furthermore, ChatBox does not make any representations concerning the accuracy or reliability of the use of the materials on its Website or otherwise relating to such materials or any sites linked to this Website.
+          All the materials on VCBox’s Website are provided "as is". Community makes no warranties, may it be expressed or implied, therefore negates all other warranties. Furthermore, VCBox does not make any representations concerning the accuracy or reliability of the use of the materials on its Website or otherwise relating to such materials or any sites linked to this Website.
         </p>
       </div>
     </form>

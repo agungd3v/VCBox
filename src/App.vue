@@ -23,22 +23,20 @@ export default {
     Auth,
     Loader
   },
+  data() {
+    return {}
+  },
   computed: {
     ...mapGetters({
       'loader': 'loader',
       'user': 'user'
     })
   },
-  mounted() {
-    this.testloader()
+  created() {
+    this.loadApp()
   },
   methods: {
-    testloader() {
-      this.$store.dispatch('setLoader', true)
-      setTimeout(() => {
-        this.$store.dispatch('setLoader', false)
-      }, 5000);
-    }
+    loadApp() {}
   }
 }
 </script>
