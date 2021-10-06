@@ -12,12 +12,13 @@
       class="absolute w-40"
       style="left: -25px; bottom: -65px"
     >
-      <p class="text-xl">You are offline</p>
+      <p class="text-xl">{{ message }}</p>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'Loader'
+  name: 'Loader',
+  props: ['message']
 }
 </script>

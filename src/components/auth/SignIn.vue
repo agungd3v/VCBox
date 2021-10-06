@@ -3,7 +3,15 @@
     <h3 class="text-center text-2xl font-bold">Sign In</h3>
     <form @submit.prevent="signin" class="mt-12">
       <div class="mb-5">
-        <vue-phone-number-input v-model="logPhone" />
+        <vue-phone-number-input
+          @update="checkNumber"
+          v-model="dumpNumber"
+          :no-country-selector="true"
+          :default-country-code="defaultCountry"
+          :valid-color="validColor"
+          :color="color"
+          :show-code-on-list="true"
+        />
       </div>
       <div class="mb-5">
         <input type="password" class="custom__input_field" v-model="logPassword" placeholder="Password">
@@ -32,28 +40,34 @@ export default {
   data() {
     return {
       logPhone: null,
-      logPassword: null
+      logPassword: null,
+
+      dumpNumber: null,
+      defaultCountry: 'ID',
+      color: '#1E90FF',
+      validColor: '#1E90FF'
     }
   },
   methods: {
     async signin() {
+      if (!this.logPhone || !this.logPassword) return false
+      this.$store.dispatch('setLoader', JSON.stringify({
+        status: true,
+        message: 'Logging...'
+      }))
       try {
-        if (!this.email || !this.password) return console.error('fields is required')
-        const request = await this.axios.post('/login', {
-          usormail: this.email,
-          pwd: this.password
+        await this.$socket.emit('login', {
+          phone: this.logPhone,
+          password: this.logPassword
         })
-        if (request.status) {
-          this.$store.dispatch('setUser', request.message.user)
-          this.$store.dispatch('setToken', request.message.token)
-          localStorage.setItem('bearer', JSON.stringify({
-            user: this.$store.state.user,
-            token: this.$store.state.token
-          }))
-          return this.$router.push({ name: 'Home' })
-        }
       } catch (error) {
         console.error(error)
+      }
+    },
+    checkNumber(payload) {
+      if (payload.countryCode == 'ID') {
+        this.color = payload.isValid ? '#1E90FF' : '#EF4444'
+        this.logPhone = payload.formattedNumber
       }
     }
   }

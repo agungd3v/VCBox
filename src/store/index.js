@@ -11,8 +11,15 @@ export default new Vuex.Store({
   state: {
     user: null,
     token: null,
-    loader: false,
-    announcement: false
+    loader: {
+      status: false,
+      message: ''
+    },
+    announcement: {
+      status: false,
+      message: '',
+      background: ''
+    }
   },
   mutations: {
     initializeapp(state) {
@@ -43,13 +50,19 @@ export default new Vuex.Store({
       commit('setToken', params)
     },
     setLoader ({ commit }, params) {
-      commit('setLoader', params)
+      commit('setLoader', JSON.parse(params))
     },
     setAnnouncement ({ commit }, params) {
-      commit('setAnnouncement', params)
       setTimeout(() => {
-        commit('setAnnouncement', false)
-      }, 5000)
+        commit('setAnnouncement', JSON.parse(params))
+      }, 1500)
+      setTimeout(() => {
+        commit('setAnnouncement', JSON.stringify({
+          status: false,
+          message: '',
+          background: ''
+        }))
+      }, 6500)
     },
     logout ({ commit }, params = false) {
       if (params) {

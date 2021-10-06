@@ -2,8 +2,8 @@
   <div id="app" class="content__wrapper">
     <div class="box__wrapper justify-center">
       <div class="curtain"></div>
-      <announcement v-if="alert" />
-      <loader v-if="loader" />
+      <announcement v-if="alert.status" :message="alert.message" :background="alert.background" />
+      <loader :message="loader.message" v-if="loader.status" />
       <div v-else class="container 2xl:px-20 mx-auto relative" id="content">
         <chat-box v-if="user" />
         <auth v-else />

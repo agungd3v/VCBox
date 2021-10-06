@@ -69,7 +69,10 @@ export default {
       if (!this.regPhone) return false
       if (!this.regPhone.valid) return false
       if (!this.regCheck) return false
-      this.$store.dispatch('setLoader', true)
+      this.$store.dispatch('setLoader', JSON.stringify({
+        status: true,
+        message: 'Registering...'
+      }))
       try {
         await this.$socket.emit('register', {
           name: this.regName,
