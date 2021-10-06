@@ -2,6 +2,7 @@
   <div id="app" class="content__wrapper">
     <div class="box__wrapper justify-center">
       <div class="curtain"></div>
+      <announcement v-if="alert" />
       <loader v-if="loader" />
       <div v-else class="container 2xl:px-20 mx-auto relative" id="content">
         <chat-box v-if="user" />
@@ -17,11 +18,13 @@ import { mapGetters } from 'vuex'
 import ChatBox from '@/components/app/ChatBox.vue'
 import Auth from '@/components/app/Auth.vue'
 import Loader from '@/components/utils/Loader.vue'
+import Announcement from '@/components/utils/Announcement.vue'
 export default {
   components: {
     ChatBox,
     Auth,
-    Loader
+    Loader,
+    Announcement
   },
   data() {
     return {}
@@ -29,7 +32,8 @@ export default {
   computed: {
     ...mapGetters({
       'loader': 'loader',
-      'user': 'user'
+      'user': 'user',
+      'alert': 'announcement'
     })
   },
   created() {

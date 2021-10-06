@@ -12,6 +12,7 @@ export default new Vuex.Store({
     user: null,
     token: null,
     loader: false,
+    announcement: false
   },
   mutations: {
     initializeapp(state) {
@@ -29,6 +30,9 @@ export default new Vuex.Store({
     },
     setLoader (state, value) {
       state.loader = value
+    },
+    setAnnouncement (state, value) {
+      state.announcement = value
     }
   },
   actions: {
@@ -41,6 +45,12 @@ export default new Vuex.Store({
     setLoader ({ commit }, params) {
       commit('setLoader', params)
     },
+    setAnnouncement ({ commit }, params) {
+      commit('setAnnouncement', params)
+      setTimeout(() => {
+        commit('setAnnouncement', false)
+      }, 5000)
+    },
     logout ({ commit }, params = false) {
       if (params) {
         commit('setUser', null)
@@ -52,6 +62,7 @@ export default new Vuex.Store({
   getters: {
     user: state => state.user,
     token: state => state.token,
-    loader: state => state.loader
+    loader: state => state.loader,
+    announcement: state => state.announcement
   }
 })

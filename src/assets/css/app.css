@@ -498,6 +498,12 @@ small {
   animation: content .5s ease-in-out;
 }
 
+#announcement {
+  top: 135px;
+  left: 10px;
+  animation: announcement .3s ease-in-out;
+}
+
 @keyframes content {
   from {
     transform: scale(2);
@@ -505,6 +511,17 @@ small {
   }
   to {
     transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes announcement {
+  from {
+    left: -100px;
+    opacity: 0;
+  }
+  to {
+    left: 10px;
     opacity: 1;
   }
 }
