@@ -2,6 +2,10 @@ small {
   font-size: 11px;
 }
 
+.bg-eded {
+  background-color: #ededed;
+}
+
 .bg-dodgerblue {
   background-color: dodgerblue;
 }
@@ -502,6 +506,16 @@ small {
   top: 135px;
   left: 10px;
   animation: announcement .3s ease-in-out;
+}
+
+#profile {
+  left: -100%;
+  transition: left .5s ease-in-out;
+}
+
+#profile.open {
+  left: 0;
+  transition: left .5s ease-in-out;
 }
 
 @keyframes content {

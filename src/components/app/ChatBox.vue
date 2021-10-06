@@ -1,9 +1,10 @@
 <template>
   <div class="flex box__shadow">
-    <div class="vh-90 w-full px-0 bg-white">
-      <div class="box__left__wrapper">
+    <div class="vh-90 px-0 bg-white">
+      <div class="box__left__wrapper relative overflow-hidden">
+        <profile :open="profile" @close="boxProfile" />
         <header class="box__header_left">
-          <div class="box__profile">
+          <div class="box__profile cursor-pointer" @click="profile = true">
             <div class="profile">
               <img src="@/assets/images/profile.jpeg" class="profile__img" draggable="false">
             </div>
@@ -159,7 +160,21 @@
 </template>
 
 <script>
+import Profile from '@/components/utils/Profile.vue'
 export default {
-  name: 'ChatBox'
+  name: 'ChatBox',
+  components: {
+    Profile
+  },
+  data() {
+    return {
+      profile: false
+    }
+  },
+  methods: {
+    boxProfile(props) {
+      this.profile = props
+    }
+  }
 }
 </script>
