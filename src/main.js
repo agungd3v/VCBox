@@ -13,5 +13,6 @@ Vue.prototype.$socket = socket
 
 new Vue({
   store,
+  created() { this.$store.commit('initializeapp') },
   render: h => h(App)
 }).$mount('#app')

@@ -37,6 +37,10 @@ export default function webSocketPlugin (socket) {
         message: ''
       }))
       if (payload.status) {
+        store.dispatch('setUser', payload.message)
+        localStorage.setItem('bearer', JSON.stringify({
+          user: store.state.user
+        }))
         store.dispatch('setAnnouncement', JSON.stringify({
           status: true,
           message: 'Login successfully',

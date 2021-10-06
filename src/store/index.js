@@ -10,7 +10,6 @@ export default new Vuex.Store({
   plugins: [webSocket],
   state: {
     user: null,
-    token: null,
     loader: {
       status: false,
       message: ''
@@ -26,14 +25,10 @@ export default new Vuex.Store({
       const getBearer = JSON.parse(localStorage.getItem('bearer'))
       if (getBearer) {
         state.user = getBearer.user
-        state.token = getBearer.token
       }
     },
     setUser (state, value) {
       state.user = value
-    },
-    setToken (state, value) {
-      state.token = value
     },
     setLoader (state, value) {
       state.loader = value
@@ -45,9 +40,6 @@ export default new Vuex.Store({
   actions: {
     setUser ({ commit }, params) {
       commit('setUser', params)
-    },
-    setToken ({ commit }, params) {
-      commit('setToken', params)
     },
     setLoader ({ commit }, params) {
       commit('setLoader', JSON.parse(params))
@@ -67,14 +59,12 @@ export default new Vuex.Store({
     logout ({ commit }, params = false) {
       if (params) {
         commit('setUser', null)
-        commit('setToken', null)
         localStorage.removeItem('bearer')
       }
     }
   },
   getters: {
     user: state => state.user,
-    token: state => state.token,
     loader: state => state.loader,
     announcement: state => state.announcement
   }
