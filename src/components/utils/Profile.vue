@@ -81,7 +81,7 @@ export default {
         }))
       }, 5000)
     },
-    changePhoto() {
+    changePhoto(evt) {
       this.$socket.emit('changePhoto', evt.target.files[0])
     }
   }
