@@ -53,7 +53,7 @@ export default {
       if (!this.logPhone || !this.logPassword) return false
       this.$store.dispatch('setLoader', JSON.stringify({
         status: true,
-        message: 'Logging...'
+        message: 'Logging user...'
       }))
       try {
         await this.$socket.emit('login', {

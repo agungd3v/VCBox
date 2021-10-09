@@ -15,8 +15,12 @@
           <span>Profile</span>
         </div>
         <div class="flex py-5 justify-center">
-          <div class="w-56 h-56 rounded-full overflow-hidden">
+          <div
+            class="w-56 h-56 rounded-full overflow-hidden relative cursor-pointer profile__img_expand"
+            @click="$refs.changePhoto.click()"
+          >
             <img src="@/assets/images/profile.jpeg" class="w-56 h-56 rounded-full">
+            <input type="file" ref="changePhoto" @change="changePhoto" style="display: none">
           </div>
         </div>
       </div>
@@ -27,6 +31,15 @@
         <span class="text-xs leading-none text-gray-500">
           This is not your username or pin. This name will be visible to your VCBox contacts.
         </span>
+      </div>
+      <div class="py-5 px-5">
+        <button
+          class="bg-dodgerblue text-white w-full py-3 hover:bg-blue-500"
+          style="border-radius: 4px"
+          @click="signout"
+        >
+          Sign Out
+        </button>
       </div>
     </div>
   </div>
@@ -46,9 +59,30 @@ export default {
       'user': 'user'
     })
   },
+  mounted() {
+    this.$socket.on('rgdrive', payload => {
+      console.log(payload)
+    })
+  },
   methods: {
     closeProfile() {
       this.$emit('close', false)
+    },
+    signout() {
+      this.$store.dispatch('setLoader', JSON.stringify({
+        status: true,
+        message: 'Separate user...'
+      }))
+      setTimeout(() => {
+        const signout = this.$store.dispatch('logout', true)
+        if (signout) this.$store.dispatch('setLoader', JSON.stringify({
+          status: false,
+          message: ''
+        }))
+      }, 5000)
+    },
+    changePhoto() {
+      this.$socket.emit('changePhoto', evt.target.files[0])
     }
   }
 }

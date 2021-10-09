@@ -60,6 +60,7 @@ export default new Vuex.Store({
       if (params) {
         commit('setUser', null)
         localStorage.removeItem('bearer')
+        return true
       }
     }
   },
