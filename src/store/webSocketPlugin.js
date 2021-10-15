@@ -45,6 +45,7 @@ export default function webSocketPlugin (socket) {
         localStorage.setItem('bearer', JSON.stringify({
           user: store.state.user
         }))
+        socket.emit('lists_conversation', vuex.getters.user._id)
         store.dispatch('setAnnouncement', JSON.stringify({
           status: true,
           message: 'Login successfully',
