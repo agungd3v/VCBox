@@ -37,34 +37,70 @@
               </svg>
             </div>
             <div class="search__input">
-              <input type="text" class="input__text" autocomplete="off" placeholder="Search or start new chat">
+              <input type="text" class="input__text" v-model="search" autocomplete="off" placeholder="Search or start new chat">
             </div>
           </div>
         </div>
         <div class="box__contact">
-          <div
-            v-for="i in 23"
-            :key="i"
-            class="contact__wrapper"
-            :class="i == 1 ? 'active' : ''"
-          >
-            <div class="contact__img">
-              <div class="border__light wrapper__img__contact">
-                <img src="@/assets/images/contact.jpeg" class="img__contact">
+          <div v-if="search !== ''">
+            <div
+              v-for="(result, index) in searchResults"
+              :key="index"
+              class="contact__wrapper"
+              @click.prevent="getUserInfo(result)"
+            >
+              <div class="contact__img">
+                <div class="border__light wrapper__img__contact">
+                  <img src="@/assets/images/contact.jpeg" class="img__contact">
+                </div>
+              </div>
+              <div class="contact__info">
+                <div class="contact__chat">
+                  <p class="mb-0 font-semibold">{{ result.fullname }}</p>
+                  <small class="text-info">Thursday</small>
+                </div>
+                <div class="contact__chat">
+                  <span class="text-sm">https://insights.stackoverflow.com/survey @Mas Ulwan @Mas Rajip kampoos. id @Mas Aris @Rizal Imp @Adit</span>
+                  <div class="contact__icon">
+                    <div class="pinned__wrap">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-pin-angle-fill" viewBox="0 0 16 16">
+                        <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="contact__info">
-              <div class="contact__chat">
-                <p class="mb-0 font-semibold">Brace Indonesia</p>
-                <small class="text-info">Thursday</small>
+          </div>
+          <div v-else>
+            <div
+              v-for="(recent, i) in lists"
+              :key="i"
+              class="contact__wrapper"
+              @click.prevent="getUserInfo(parseUserConversation(recent.is_user))"
+            >
+              <div class="contact__img">
+                <div class="border__light wrapper__img__contact">
+                  <img src="@/assets/images/contact.jpeg" class="img__contact">
+                </div>
               </div>
-              <div class="contact__chat">
-                <span class="text-sm">https://insights.stackoverflow.com/survey @Mas Ulwan @Mas Rajip kampoos. id @Mas Aris @Rizal Imp @Adit</span>
-                <div class="contact__icon">
-                  <div class="pinned__wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-pin-angle-fill" viewBox="0 0 16 16">
-                      <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z"/>
-                    </svg>
+              <div class="contact__info">
+                <div class="contact__chat">
+                  <p class="mb-0 font-semibold">{{ parseUserConversation(recent.is_user).fullname }}</p>
+                  <small class="text-info">
+                    {{ parseLastMessageConversation(recent.messages).parse_date }}
+                  </small>
+                </div>
+                <div class="contact__chat">
+                  <span class="text-sm">
+                    {{ parseLastMessageConversation(recent.messages).message }}
+                  </span>
+                  <div class="contact__icon">
+                    <div class="pinned__wrap">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-pin-angle-fill" viewBox="0 0 16 16">
+                        <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z"/>
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -74,7 +110,16 @@
       </div>
     </div>
     <div class="flex-1 vh-90 px-0 bg-white">
-      <div class="box__right__wrapper">
+      <div v-if="!conversation" class="relative h-full">
+        <div class="bg-eded h-full flex flex-col justify-center items-center gap-5">
+          <img src="/favicon.png" alt="icon" class="w-48">
+          <h1 class="text-xl">
+            Make conversation with
+            <span class="text-dodgerblue font-bold">VCBox</span>
+          </h1>
+        </div>
+      </div>
+      <div v-else class="box__right__wrapper">
         <header class="box__header_right">
           <div class="box__profile_contact">
             <div class="profile">
@@ -84,10 +129,10 @@
           <div class="box__profile_ttl">
             <div class="contact__info py-0">
               <div class="contact__chat">
-                <p class="mb-0 font-semibold">Brace Indonesia</p>
+                <p class="mb-0 font-semibold">{{ conversation.ppl.name }}</p>
               </div>
               <div class="contact__chat">
-                <span class="text-sm">6 Participans</span>
+                <!-- <span class="text-sm">6 Participans</span> -->
               </div>
             </div>
           </div>
@@ -108,17 +153,20 @@
           <div class="chat__wrapper">
             <div class="chat__box_wrapper">
               <div class="px-5">
-                <div class="message__wrapper">
+                <div v-if="conversation.ray" class="message__wrapper">
                   <div
-                    v-for="i in 13"
-                    :key="i"
+                    v-for="(msg, index) in conversation.ray.messages"
+                    :key="index"
                     class="is_message__content"
-                    :class="i % 2 == 0 ? 'justify-end' : ''"
+                    :class="msg.is_user._id == user._id || msg.is_user == user._id ? 'justify-end' : ''"
                   >
                     <div class="is_message__wrapper">
-                      <div class="is_message">
-                        <p v-if="i % 2 == 1">Rajif Mahendra</p>
-                        <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, magnam.</span>
+                      <div
+                        class="is_message"
+                        :class="msg.is_user._id == user._id || msg.is_user == user._id ? 'float-right' : 'float-left'"
+                      >
+                        <p v-if="msg.is_user._id != user._id">{{ msg.is_user.fullname }}</p>
+                        <span>{{ msg.message }}</span>
                         <p>20:14</p>
                       </div>
                     </div>
@@ -128,7 +176,7 @@
             </div>
           </div>
         </div>
-        <div class="box__text_chat">
+        <form class="box__text_chat" @submit.prevent="sendMessage">
           <div class="chat__icon_left">
             <div class="chat__icon_wrapper">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-emoji-smile" viewBox="0 0 16 16">
@@ -143,7 +191,7 @@
             </div>
           </div>
           <div class="chat__input_text">
-            <input type="text" placeholder="Type a message" class="rounded-pill input_message">
+            <input type="text" v-model="message" placeholder="Type a message" class="rounded-pill input_message">
           </div>
           <div class="chat__icon_right">
             <div class="chat__icon_wrapper">
@@ -153,13 +201,14 @@
               </svg>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Profile from '@/components/utils/Profile.vue'
 export default {
   name: 'ChatBox',
@@ -168,12 +217,85 @@ export default {
   },
   data() {
     return {
-      profile: false
+      profile: false,
+      search: '',
+      searchResults: [],
+      message: ''
     }
+  },
+  computed: {
+    ...mapGetters({
+      'user': 'user',
+      'conversation': 'conversation',
+      'lists': 'lists'
+    })
+  },
+  watch: {
+    search(value) {
+      if (value !== '') return this.$socket.emit('search', {
+        keyword: value,
+        userid: this.user._id
+      })
+    }
+  },
+  mounted() {
+    this.$socket.on('resultsearch', data => {
+      if (data.status) return this.searchResults = data.message
+    })
+    this.$socket.on('start_message', data => {
+      this.conversation.ray = data
+      this.$store.dispatch('setConversation', JSON.stringify(this.conversation))
+    })
   },
   methods: {
     boxProfile(props) {
       this.profile = props
+    },
+    getUserInfo(data) {
+      this.$store.dispatch("setConversation", JSON.stringify({
+        ppl: {
+          name: data.fullname,
+          photo: data.photo,
+        }
+      }))
+      this.$socket.emit('conversation', {
+        from: this.user._id,
+        to: data._id
+      })
+    },
+    sendMessage() {
+      const storage = JSON.parse(localStorage.getItem('bearer'))
+      if (storage) {
+        const msg = {
+          is_user: storage.user._id,
+          message: this.message,
+          created_at: Date()
+        }
+        this.conversation.ray.messages.push(msg)
+        this.$store.dispatch("setConversation", JSON.stringify(this.conversation))
+        this.$socket.emit('in_message', this.conversation.ray._id, msg)
+      }
+      this.message = ''
+    },
+    parseUserConversation(arr) {
+      const storage = JSON.parse(localStorage.getItem('bearer'))
+      if (storage) {
+        const data = arr.filter(data => {
+          if (data._id != storage.user._id) return data
+        })
+        return data[0]
+      }
+    },
+    parseLastMessageConversation(arr) {
+      const lastMessage = arr[arr.length - 1]
+      
+      const date = new Date(lastMessage.created_at)
+      const getDate = date.getDate()
+      const getMonth = date.getMonth() + 1
+      const getYear = date.getFullYear()
+
+      lastMessage.parse_date = `${getDate}/${getMonth}/${getYear}`
+      return lastMessage
     }
   }
 }

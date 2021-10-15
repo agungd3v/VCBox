@@ -1,3 +1,5 @@
+import vuex from '../store'
+
 export default function webSocketPlugin (socket) {
   return store => {
     store.$socket = socket
@@ -5,10 +7,13 @@ export default function webSocketPlugin (socket) {
       status: true,
       message: 'You are offline'
     })))
-    socket.on('connect', () => store.dispatch('setLoader', JSON.stringify({
-      status: false,
-      message: ''
-    })))
+    socket.on('connect', () => {
+      store.dispatch('setLoader', JSON.stringify({ status: false, message: ''}))
+      const storage = JSON.parse(localStorage.getItem('bearer'))
+      if (storage) {
+        socket.emit('lists_conversation', storage.user._id)
+      }
+    })
 
     socket.on("logregister", payload => {
       store.dispatch('setLoader', JSON.stringify({
@@ -28,7 +33,6 @@ export default function webSocketPlugin (socket) {
           background: 'bg-red-500'
         }))
       }
-      // console.error(payload)
     })
 
     socket.on("loglogin", payload => {
@@ -53,7 +57,24 @@ export default function webSocketPlugin (socket) {
           background: 'bg-red-500'
         }))
       }
-      // console.error(payload)
+    })
+
+    socket.on("start_conversation", data => {
+      vuex.getters.conversation.ray = data.message
+      store.dispatch('setConversation', JSON.stringify(vuex.getters.conversation))
+      const storage = JSON.parse(localStorage.getItem('bearer'))
+      if (storage) {
+        socket.emit("join_conversation", vuex.getters.conversation.ray._id, vuex.getters.conversation.ray)
+      }
+    })
+
+    socket.on("comming_message", data => {
+      vuex.getters.conversation.ray = data.message
+      store.dispatch('setConversation', JSON.stringify(vuex.getters.conversation))
+    })
+
+    socket.on('lists_comming', data => {
+      store.dispatch('setLists', data.message)
     })
   }
 }

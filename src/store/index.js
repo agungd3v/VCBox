@@ -10,6 +10,8 @@ export default new Vuex.Store({
   plugins: [webSocket],
   state: {
     user: null,
+    conversation: null,
+    lists: [],
     loader: {
       status: false,
       message: ''
@@ -35,6 +37,12 @@ export default new Vuex.Store({
     },
     setAnnouncement (state, value) {
       state.announcement = value
+    },
+    setConversation (state, value) {
+      state.conversation = value
+    },
+    setLists (state, value) {
+      state.lists = value
     }
   },
   actions: {
@@ -56,6 +64,12 @@ export default new Vuex.Store({
         }))
       }, 6500)
     },
+    setConversation ({ commit }, params) {
+      commit('setConversation', params)
+    },
+    setLists ({ commit }, params) {
+      commit('setLists', params)
+    },
     logout ({ commit }, params = false) {
       if (params) {
         commit('setUser', null)
@@ -67,6 +81,8 @@ export default new Vuex.Store({
   getters: {
     user: state => state.user,
     loader: state => state.loader,
-    announcement: state => state.announcement
+    announcement: state => state.announcement,
+    conversation: state => JSON.parse(state.conversation),
+    lists: state => state.lists
   }
 })

@@ -10,6 +10,10 @@ small {
   background-color: dodgerblue;
 }
 
+.text-dodgerblue {
+  color: dodgerblue;
+}
+
 .py-0 {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
