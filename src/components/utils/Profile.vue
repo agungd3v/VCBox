@@ -20,7 +20,7 @@
             @click="$refs.changePhoto.click()"
           >
             <img
-              :src="user.photo ? `https://drive.google.com/thumbnail?id=${user.photo}` : '/favicon.png'"
+              :src="user.photo ? `https://drive.google.com/uc?id=${user.photo}&export=view` : '/favicon.png'"
               class="w-56 h-56 rounded-full"
             >
             <input type="file" ref="changePhoto" @change="changePhoto" style="display: none">

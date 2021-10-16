@@ -84,7 +84,7 @@ export default function webSocketPlugin (socket) {
       if (storage) {
         if (storage.user._id == data.message._id) {
           localStorage.setItem('bearer', JSON.stringify({ user: data.message }))
-          setInterval(() => store.dispatch('setUser', storage.user), 1000);
+          store.commit('initializeapp')
         }
       }
     })

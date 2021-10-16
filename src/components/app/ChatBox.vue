@@ -7,7 +7,7 @@
           <div class="box__profile cursor-pointer" @click="profile = true">
             <div class="profile">
               <img
-                :src="user.photo ? `https://drive.google.com/thumbnail?id=${user.photo}` : '/favicon.png'"
+                :src="user.photo ? `https://drive.google.com/uc?id=${user.photo}&export=view` : '/favicon.png'"
                 class="profile__img"
                 draggable="false"
               >
@@ -55,7 +55,10 @@
             >
               <div class="contact__img">
                 <div class="border__light wrapper__img__contact">
-                  <img :src="user.photo ? user.photo : '/favicon.png'" class="img__contact">
+                  <img
+                    :src="result.photo ? `https://drive.google.com/uc?id=${result.photo}&export=view` : '/favicon.png'"
+                    class="img__contact"
+                  >
                 </div>
               </div>
               <div class="contact__info">
@@ -86,7 +89,7 @@
               <div class="contact__img">
                 <div class="border__light wrapper__img__contact">
                   <img
-                    :src="parseUserConversation(recent.is_user).photo ? parseUserConversation(recent.is_user).photo : '/favicon.png'"
+                    :src="parseUserConversation(recent.is_user).photo ? `https://drive.google.com/uc?id=${parseUserConversation(recent.is_user).photo}&export=view` : '/favicon.png'"
                     class="img__contact"
                   >
                 </div>
@@ -130,7 +133,10 @@
         <header class="box__header_right">
           <div class="box__profile_contact">
             <div class="profile">
-              <img src="@/assets/images/contact.jpeg" class="profile__img" draggable="false">
+              <img
+                :src="conversation.ppl.photo ? `https://drive.google.com/uc?id=${conversation.ppl.photo}&export=view` : '/favicon.png'"
+                class="profile__img" draggable="false"
+              >
             </div>
           </div>
           <div class="box__profile_ttl">
