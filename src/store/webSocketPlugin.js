@@ -79,7 +79,6 @@ export default function webSocketPlugin (socket) {
     })
 
     socket.on('photo_changed', data => {
-      // console.log(data)
       const storage = JSON.parse(localStorage.getItem('bearer'))
       if (storage) {
         if (storage.user._id == data.message._id) {

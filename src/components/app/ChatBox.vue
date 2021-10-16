@@ -253,7 +253,9 @@ export default {
   },
   mounted() {
     this.$socket.on('resultsearch', data => {
-      if (data.status) return this.searchResults = data.message
+      if (data.status) return this.searchResults = data.message.filter(dtx => {
+        return dtx._id != this.user._id
+      })
     })
     this.$socket.on('start_message', data => {
       this.conversation.ray = data
