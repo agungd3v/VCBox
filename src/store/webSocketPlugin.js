@@ -45,7 +45,7 @@ export default function webSocketPlugin (socket) {
         localStorage.setItem('bearer', JSON.stringify({
           user: store.state.user
         }))
-        socket.emit('lists_conversation', vuex.getters.user._id)
+        socket.emit('lists_conversation', store.state.user._id)
         store.dispatch('setAnnouncement', JSON.stringify({
           status: true,
           message: 'Login successfully',
@@ -76,6 +76,17 @@ export default function webSocketPlugin (socket) {
 
     socket.on('lists_comming', data => {
       store.dispatch('setLists', data.message)
+    })
+
+    socket.on('photo_changed', data => {
+      // console.log(data)
+      const storage = JSON.parse(localStorage.getItem('bearer'))
+      if (storage) {
+        if (storage.user._id == data.message._id) {
+          localStorage.setItem('bearer', JSON.stringify({ user: data.message }))
+          setInterval(() => store.dispatch('setUser', storage.user), 1000);
+        }
+      }
     })
   }
 }

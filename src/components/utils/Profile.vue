@@ -19,7 +19,10 @@
             class="w-56 h-56 rounded-full overflow-hidden relative cursor-pointer profile__img_expand"
             @click="$refs.changePhoto.click()"
           >
-            <img :src="user.photo ? user.photo : '/favicon.png'" class="w-56 h-56 rounded-full">
+            <img
+              :src="user.photo ? `https://drive.google.com/thumbnail?id=${user.photo}` : '/favicon.png'"
+              class="w-56 h-56 rounded-full"
+            >
             <input type="file" ref="changePhoto" @change="changePhoto" style="display: none">
           </div>
         </div>
@@ -59,11 +62,7 @@ export default {
       'user': 'user'
     })
   },
-  mounted() {
-    this.$socket.on('rgdrive', payload => {
-      console.log(payload)
-    })
-  },
+  mounted() {},
   methods: {
     closeProfile() {
       this.$emit('close', false)
@@ -82,7 +81,10 @@ export default {
       }, 5000)
     },
     changePhoto(evt) {
-      this.$socket.emit('changePhoto', evt.target.files[0])
+      this.$socket.emit('changePhoto', evt.target.files[0], {
+        id: this.user._id,
+        photo: this.user.photo
+      })
     }
   }
 }

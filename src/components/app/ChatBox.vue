@@ -6,7 +6,11 @@
         <header class="box__header_left">
           <div class="box__profile cursor-pointer" @click="profile = true">
             <div class="profile">
-              <img :src="user.photo ? user.photo : '/favicon.png'" class="profile__img" draggable="false">
+              <img
+                :src="user.photo ? `https://drive.google.com/thumbnail?id=${user.photo}` : '/favicon.png'"
+                class="profile__img"
+                draggable="false"
+              >
             </div>
           </div>
           <div class="box__action_left">

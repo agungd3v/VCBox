@@ -7,5 +7,5 @@ module.exports = {
       title: 'VCBox',
       chunks: ['chunk-vendors', 'chunk-common', 'index']
     }
-  }
+  },
 }
