@@ -6,7 +6,7 @@
         <header class="box__header_left">
           <div class="box__profile cursor-pointer" @click="profile = true">
             <div class="profile">
-              <img src="@/assets/images/profile.jpeg" class="profile__img" draggable="false">
+              <img :src="user.photo ? user.photo : '/favicon.png'" class="profile__img" draggable="false">
             </div>
           </div>
           <div class="box__action_left">
@@ -51,7 +51,7 @@
             >
               <div class="contact__img">
                 <div class="border__light wrapper__img__contact">
-                  <img src="@/assets/images/contact.jpeg" class="img__contact">
+                  <img :src="user.photo ? user.photo : '/favicon.png'" class="img__contact">
                 </div>
               </div>
               <div class="contact__info">
@@ -81,7 +81,10 @@
             >
               <div class="contact__img">
                 <div class="border__light wrapper__img__contact">
-                  <img src="@/assets/images/contact.jpeg" class="img__contact">
+                  <img
+                    :src="parseUserConversation(recent.is_user).photo ? parseUserConversation(recent.is_user).photo : '/favicon.png'"
+                    class="img__contact"
+                  >
                 </div>
               </div>
               <div class="contact__info">

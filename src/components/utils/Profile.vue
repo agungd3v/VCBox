@@ -19,7 +19,7 @@
             class="w-56 h-56 rounded-full overflow-hidden relative cursor-pointer profile__img_expand"
             @click="$refs.changePhoto.click()"
           >
-            <img src="@/assets/images/profile.jpeg" class="w-56 h-56 rounded-full">
+            <img :src="user.photo ? user.photo : '/favicon.png'" class="w-56 h-56 rounded-full">
             <input type="file" ref="changePhoto" @change="changePhoto" style="display: none">
           </div>
         </div>
