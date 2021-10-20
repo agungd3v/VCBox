@@ -74,6 +74,16 @@ export default function webSocketPlugin (socket) {
       store.dispatch('setConversation', JSON.stringify(vuex.getters.conversation))
     })
 
+    socket.on('update_list_after_send_message', (data) => {
+      const storage = JSON.parse(localStorage.getItem('bearer'))
+      if (storage) {
+        const filtering = data.message.is_user.filter(dax => dax._id == storage.user._id)
+        if (filtering[0]._id == storage.user._id) {
+          socket.emit('lists_conversation', storage.user._id)
+        }
+      }
+    })
+
     socket.on('lists_comming', data => {
       store.dispatch('setLists', data.message)
     })
