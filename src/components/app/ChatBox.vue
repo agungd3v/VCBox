@@ -3,6 +3,7 @@
     <div class="vh-90 px-0 bg-white">
       <div class="box__left__wrapper relative overflow-hidden">
         <profile :open="profile" @close="boxProfile" />
+        <make-group :open="makegroup" @close="boxGroup" />
         <header class="box__header_left">
           <div class="box__profile cursor-pointer" @click="profile = true">
             <div class="profile">
@@ -33,6 +34,16 @@
             </div>
           </div>
         </header>
+        <div class="px-4 py-3 flex items-center gap-3 bg-dodgerblue box__left_group text-white cursor-pointer" @click="makegroup = true">
+          <div class="w-10 h-10 bg-white rounded-full text-dodgerblue flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+              <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+              <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+              <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+            </svg>
+          </div>
+          <span>Make group</span>
+        </div>
         <div class="box__search">
           <div class="search__wrapper rounded-pill">
             <div class="search__icon">
@@ -217,14 +228,17 @@
 <script>
 import { mapGetters } from 'vuex'
 import Profile from '@/components/utils/Profile.vue'
+import MakeGroup from '@/components/utils/MakeGroup.vue'
 export default {
   name: 'ChatBox',
   components: {
-    Profile
+    Profile,
+    MakeGroup
   },
   data() {
     return {
       profile: false,
+      makegroup: false,
       search: '',
       searchResults: [],
       message: ''
@@ -259,6 +273,9 @@ export default {
   methods: {
     boxProfile(props) {
       this.profile = props
+    },
+    boxGroup(props) {
+      this.makegroup = props
     },
     async getUserInfo(data) {
       this.$store.dispatch("setConversation", JSON.stringify({

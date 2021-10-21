@@ -95,6 +95,10 @@ small {
   align-items: center;
 }
 
+.box__left_group {
+  border-right: 1px solid rgba(0, 0, 0, .08);
+}
+
 .box__header_left {
   border-right: 1px solid rgba(0, 0, 0, .08);
   padding-top: 12px;
@@ -527,12 +531,14 @@ small {
   animation: announcement .3s ease-in-out;
 }
 
-#profile {
+#profile,
+#makegroup {
   left: -100%;
   transition: left .5s ease-in-out;
 }
 
-#profile.open {
+#profile.open,
+#makegroup.open {
   left: 0;
   transition: left .5s ease-in-out;
 }

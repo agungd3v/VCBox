@@ -101,5 +101,12 @@ export default function webSocketPlugin (socket) {
         }
       }
     })
+
+    socket.on('groupcreated', () => {
+      const storage = JSON.parse(localStorage.getItem('bearer'))
+      if (storage) {
+        socket.emit('lists_conversation', storage.user._id)
+      }
+    })
   }
 }
