@@ -72,6 +72,10 @@ export default function webSocketPlugin (socket) {
     socket.on("comming_message", data => {
       vuex.getters.conversation.ray = data.message
       store.dispatch('setConversation', JSON.stringify(vuex.getters.conversation))
+      setTimeout(() => {
+        const container = document.querySelectorAll('.is_message__content')
+        container[container.length - 1].scrollIntoView()
+      }, 500)
     })
 
     socket.on('update_list_after_send_message', (data) => {
