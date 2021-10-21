@@ -164,6 +164,7 @@
                     v-for="(msg, index) in conversation.ray.messages"
                     :key="index"
                     class="is_message__content"
+                    ref="msgContainer"
                     :class="msg.is_user._id == user._id || msg.is_user == user._id ? 'justify-end' : ''"
                   >
                     <div class="is_message__wrapper">
@@ -250,7 +251,7 @@ export default {
         return dtx._id != this.user._id
       })
     })
-    this.$socket.on('start_message', data => {
+    this.$socket.on('start_message', async data => {
       this.conversation.ray = data
       this.$store.dispatch('setConversation', JSON.stringify(this.conversation))
     })
@@ -259,17 +260,20 @@ export default {
     boxProfile(props) {
       this.profile = props
     },
-    getUserInfo(data) {
+    async getUserInfo(data) {
       this.$store.dispatch("setConversation", JSON.stringify({
         ppl: {
           name: data.fullname,
           photo: data.photo,
         }
       }))
-      this.$socket.emit('conversation', {
+      await this.$socket.emit('conversation', {
         from: this.user._id,
         to: data._id
       })
+      setTimeout(() => {
+        this.scrollToBot()
+      }, 500)
     },
     sendMessage() {
       const storage = JSON.parse(localStorage.getItem('bearer'))
@@ -283,6 +287,9 @@ export default {
         this.$store.dispatch("setConversation", JSON.stringify(this.conversation))
         this.$socket.emit('in_message', this.conversation.ray._id, msg)
       }
+      setTimeout(() => {
+        this.scrollToBot()
+      }, 500)
       this.message = ''
     },
     parseUserConversation(arr) {
@@ -304,6 +311,10 @@ export default {
 
       lastMessage.parse_date = `${getDate}/${getMonth}/${getYear}`
       return lastMessage
+    },
+    scrollToBot() {
+      const container = this.$refs.msgContainer
+      if (container) return container[container.length - 1].scrollIntoView()
     }
   }
 }
