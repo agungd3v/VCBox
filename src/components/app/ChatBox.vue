@@ -74,11 +74,12 @@
               </div>
               <div class="contact__info">
                 <div class="contact__chat">
-                  <p class="mb-0 font-semibold">{{ result.fullname }}</p>
-                  <!-- <small class="text-info">Thursday</small> -->
+                  <p v-if="result.fullname" class="mb-0 font-semibold">{{ result.fullname }}</p>
+                  <p v-else class="mb-0 font-semibold">{{ result.title }}</p>
                 </div>
                 <div class="contact__chat">
-                  <span class="text-sm">Type message for this user</span>
+                  <span v-if="result.fullname" class="text-sm">Type message for this user</span>
+                  <span v-else class="text-sm">Type message to this group</span>
                 </div>
               </div>
             </div>
@@ -380,7 +381,7 @@ export default {
   },
   mounted() {
     this.$socket.on('resultsearch', data => {
-      if (data.status) return this.searchResults = data.message.filter(dtx => {
+      return this.searchResults = data.filter(dtx => {
         return dtx._id != this.user._id
       })
     })
