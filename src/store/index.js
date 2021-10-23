@@ -11,6 +11,7 @@ export default new Vuex.Store({
   state: {
     user: null,
     conversation: null,
+    gconversation: null,
     lists: [],
     loader: {
       status: false,
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     setConversation (state, value) {
       state.conversation = value
     },
+    setGconversation (state, value) {
+      state.gconversation = value
+    },
     setLists (state, value) {
       state.lists = value
     }
@@ -67,6 +71,9 @@ export default new Vuex.Store({
     setConversation ({ commit }, params) {
       commit('setConversation', params)
     },
+    setGconversation ({ commit }, params) {
+      commit('setGconversation', params)
+    },
     setLists ({ commit }, params) {
       commit('setLists', params)
     },
@@ -83,6 +90,7 @@ export default new Vuex.Store({
     loader: state => state.loader,
     announcement: state => state.announcement,
     conversation: state => JSON.parse(state.conversation),
+    gconversation: state => JSON.parse(state.gconversation),
     lists: state => state.lists
   }
 })

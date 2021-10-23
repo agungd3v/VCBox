@@ -60,30 +60,52 @@ export default function webSocketPlugin (socket) {
       }
     })
 
-    socket.on("start_conversation", data => {
-      vuex.getters.conversation.ray = data.message
-      store.dispatch('setConversation', JSON.stringify(vuex.getters.conversation))
+    socket.on("start_conversation", (data, type) => {
       const storage = JSON.parse(localStorage.getItem('bearer'))
       if (storage) {
-        socket.emit("join_conversation", vuex.getters.conversation.ray._id, vuex.getters.conversation.ray)
+        if (type == 'single') {
+          vuex.getters.conversation.ray = data.message
+          store.dispatch('setConversation', JSON.stringify(vuex.getters.conversation))
+          socket.emit("join_conversation", vuex.getters.conversation.ray._id, vuex.getters.conversation.ray)
+        }
+        if (type == 'group') {
+          vuex.getters.gconversation.ray = data.message
+          store.dispatch('setGconversation', JSON.stringify(vuex.getters.gconversation))
+          socket.emit('join_gconversation', vuex.getters.gconversation.ray)
+        }
       }
     })
 
-    socket.on("comming_message", data => {
-      vuex.getters.conversation.ray = data.message
-      store.dispatch('setConversation', JSON.stringify(vuex.getters.conversation))
+    socket.on("comming_message", (data, type) => {
+      if (type == 'single') {
+        vuex.getters.conversation.ray = data.message
+        store.dispatch('setConversation', JSON.stringify(vuex.getters.conversation))
+      }
+      if (type == 'group') {
+        vuex.getters.gconversation.ray = data.message
+        store.dispatch('setGconversation', JSON.stringify(vuex.getters.gconversation))
+      }
       setTimeout(() => {
         const container = document.querySelectorAll('.is_message__content')
         container[container.length - 1].scrollIntoView()
       }, 500)
     })
 
-    socket.on('update_list_after_send_message', (data) => {
+    socket.on('update_list_after_send_message', (data, type) => {
       const storage = JSON.parse(localStorage.getItem('bearer'))
       if (storage) {
-        const filtering = data.message.is_user.filter(dax => dax._id == storage.user._id)
-        if (filtering[0]._id == storage.user._id) {
-          socket.emit('lists_conversation', storage.user._id)
+        if (type == 'single') {
+          const filtering = data.message.is_user.filter(dax => dax._id == storage.user._id)
+          if (filtering[0]._id == storage.user._id) {
+            socket.emit('lists_conversation', storage.user._id)
+          }
+        }
+        if (type == 'group') {
+          const isusr = data.message.is_user.filter(dax => dax._id == storage.user._id)
+          const isadm = data.message.is_admin.filter(dx => dx._id == storage.user._id)
+          if ((isusr.length > 0 && isusr[0]._id == storage.user._id) || (isadm.length > 0 && isadm[0]._id == storage.user._id)) {
+            socket.emit('lists_conversation', storage.user._id)
+          }
         }
       }
     })

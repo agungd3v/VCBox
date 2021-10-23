@@ -107,6 +107,8 @@ small {
 
 .box__header_right {
   border-bottom: 1px solid rgba(0, 0, 0, .08);
+  padding-top: 12px;
+  padding-bottom: 11px;
 }
 
 .box__profile,
@@ -194,7 +196,7 @@ small {
 
 .box__chat {
   flex-grow: 1;
-  background-image: url("../images/bgchat.png");
+  background-color: dodgerblue;
 }
 
 .box__contact {
@@ -564,4 +566,3 @@ small {
     opacity: 1;
   }
 }
-
