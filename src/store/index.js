@@ -12,6 +12,7 @@ export default new Vuex.Store({
     user: null,
     conversation: null,
     gconversation: null,
+    ingroup: false,
     lists: [],
     loader: {
       status: false,
@@ -45,6 +46,9 @@ export default new Vuex.Store({
     setGconversation (state, value) {
       state.gconversation = value
     },
+    setIngroup (state, value) {
+      state.ingroup = value
+    },
     setLists (state, value) {
       state.lists = value
     }
@@ -74,6 +78,9 @@ export default new Vuex.Store({
     setGconversation ({ commit }, params) {
       commit('setGconversation', params)
     },
+    setIngroup ({ commit }, params) {
+      commit('setIngroup', params)
+    },
     setLists ({ commit }, params) {
       commit('setLists', params)
     },
@@ -91,6 +98,7 @@ export default new Vuex.Store({
     announcement: state => state.announcement,
     conversation: state => JSON.parse(state.conversation),
     gconversation: state => JSON.parse(state.gconversation),
+    ingroup: state => state.ingroup,
     lists: state => state.lists
   }
 })

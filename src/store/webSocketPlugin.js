@@ -65,13 +65,22 @@ export default function webSocketPlugin (socket) {
       if (storage) {
         if (type == 'single') {
           vuex.getters.conversation.ray = data.message
+          store.dispatch('setGconversation', null)
+          store.dispatch('setIngroup', false)
           store.dispatch('setConversation', JSON.stringify(vuex.getters.conversation))
           socket.emit("join_conversation", vuex.getters.conversation.ray._id, vuex.getters.conversation.ray)
         }
         if (type == 'group') {
-          vuex.getters.gconversation.ray = data.message
-          store.dispatch('setGconversation', JSON.stringify(vuex.getters.gconversation))
-          socket.emit('join_gconversation', vuex.getters.gconversation.ray)
+          if (data.message) {
+            vuex.getters.gconversation.ray = data.message
+            store.dispatch('setConversation', null)
+            store.dispatch('setIngroup', true)
+            store.dispatch('setGconversation', JSON.stringify(vuex.getters.gconversation))
+            socket.emit('join_gconversation', vuex.getters.gconversation.ray)
+          } else {
+            store.dispatch('setConversation', null)
+            store.dispatch('setIngroup', false)
+          }
         }
       }
     })

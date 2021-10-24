@@ -155,7 +155,7 @@
       </div>
     </div>
     <div class="flex-1 vh-90 px-0 bg-white">
-      <div v-if="!conversation && !gconversation" class="relative h-full">
+      <div v-if="!conversation && !gconversation && !ingroup" class="relative h-full">
         <div class="bg-eded h-full flex flex-col justify-center items-center gap-5">
           <img src="/favicon.png" alt="icon" class="w-48">
           <h1 class="text-xl">
@@ -212,7 +212,8 @@
                     <div class="is_message__wrapper">
                       <div
                         class="is_message"
-                        :class="msg.is_user._id == user._id || msg.is_user == user._id ? 'float-right' : 'float-left'"
+                        :class="msg.is_user._id == user._id || msg.is_user == user._id ? 'float-right text-right' : 'float-left'"
+                        style="min-width: 100px"
                       >
                         <p v-if="msg.is_user._id != user._id">{{ msg.is_user.fullname }}</p>
                         <span>{{ msg.message }}</span>
@@ -252,7 +253,7 @@
           </div>
         </form>
       </div>
-      <div v-if="gconversation" class="box__right__wrapper">
+      <div v-if="gconversation && ingroup" class="box__right__wrapper">
         <header class="box__header_right">
           <div class="box__profile_contact">
             <div class="profile">
@@ -300,7 +301,8 @@
                     <div class="is_message__wrapper">
                       <div
                         class="is_message"
-                        :class="msg.is_user._id == user._id || msg.is_user == user._id ? 'float-right' : 'float-left'"
+                        :class="msg.is_user._id == user._id || msg.is_user == user._id ? 'float-right text-right' : 'float-left'"
+                        style="min-width: 100px"
                       >
                         <p v-if="msg.is_user._id != user._id">{{ msg.is_user.fullname }}</p>
                         <span>{{ msg.message }}</span>
@@ -340,6 +342,23 @@
           </div>
         </form>
       </div>
+      <div v-if="gconversation && !ingroup" class="box__right__wrapper">
+        <div class="h-full bg-eded flex flex-col justify-center items-center">
+          <div class="text-center">
+            <img
+              :src="gconversation.ppl.photo ? gconversation.ppl.photo : '/favicon.png'"
+              class="w-40 h-40"
+            >
+            <h1 class="my-3 text-xl">{{ gconversation.ppl.name }}</h1>
+            <button
+              class="bg-dodgerblue px-5 py-2 text-white rounded"
+              @click.prevent="joinGroup(gconversation.ppl.grpRyx)"
+            >
+              Join group
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -368,7 +387,8 @@ export default {
       'user': 'user',
       'conversation': 'conversation',
       'lists': 'lists',
-      'gconversation': 'gconversation'
+      'gconversation': 'gconversation',
+      'ingroup': 'ingroup'
     })
   },
   watch: {
@@ -401,19 +421,18 @@ export default {
     boxGroup(props) {
       this.makegroup = props
     },
-    async getConversationInfo(data) {
+    getConversationInfo(data) {
       this.$store.dispatch(data.fullname ? "setConversation" : "setGconversation", JSON.stringify({
         ppl: {
+          grpRyx: data.fullname ? null : data._id,
           name: data.fullname ? data.fullname : data.title,
           photo: data.photo,
         }
       }))
       if (data.fullname) {
-        if (this.gconversation) this.$store.dispatch('setGconversation', null)
-        await this.$socket.emit('conversation', { from: this.user._id, to: data._id })
+        this.$socket.emit('conversation', { from: this.user._id, to: data._id })
       } else {
-        if (this.conversation) this.$store.dispatch('setConversation', null)
-        await this.$socket.emit('gconversation', data._id)
+        this.$socket.emit('gconversation', data._id, this.user._id)
       }
       setTimeout(() => {
         this.scrollToBot()
@@ -461,6 +480,10 @@ export default {
 
       lastMessage.parse_date = `${getDate}/${getMonth}/${getYear}`
       return lastMessage
+    },
+    joinGroup(data) {
+      const storage = JSON.parse(localStorage.getItem('bearer'))
+      if (storage) this.$socket.emit('joingroup', data, storage.user._id)
     },
     scrollToBot() {
       const container = this.$refs.msgContainer
