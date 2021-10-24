@@ -254,7 +254,7 @@
         </form>
       </div>
       <div v-if="gconversation && ingroup" class="box__right__wrapper">
-        <header class="box__header_right">
+        <header class="box__header_right overflow-hidden">
           <div class="box__profile_contact">
             <div class="profile">
               <img
@@ -266,10 +266,13 @@
           <div class="box__profile_ttl">
             <div class="contact__info py-0">
               <div class="contact__chat">
-                <p class="mb-0 font-semibold">{{ gconversation.ppl.name }}</p>
+                <p class="mb-0 font-semibold">{{ gconversation.ray.title }}</p>
               </div>
               <div class="contact__chat">
-                <!-- <span class="text-sm">6 Participans</span> -->
+                <span class="text-xs">
+                  {{ gconversation.ray.is_admin.length + gconversation.ray.is_user.length }}
+                  Participans
+                </span>
               </div>
             </div>
           </div>
@@ -279,10 +282,54 @@
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
               </svg>
             </div>
-            <div class="action__left ml-10px">
+            <div
+              class="action__left ml-10px cursor-pointer" 
+              @click.prevent="openGroupSettings(gconversation.ray)"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                 <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
               </svg>
+            </div>
+          </div>
+          <div
+            class="absolute w-full h-full bg-eded left-0 transition-all duration-300 ease-in-out"
+            :class="changeTitleGroup ? 'top-0' : '-top-20'"
+          >
+            <div
+              class="h-full flex items-center"
+              style="padding-left: 16px; padding-right: 16px"
+            >
+              <span
+                class="transform rotate-45 cursor-pointer"
+                style="margin-right: 16px"
+                @click="changeTitleGroup = false"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                </svg>
+              </span>
+              <div class="flex-grow">
+                <input
+                  type="text"
+                  class="w-full h-10 rounded-md"
+                  style="padding-left: 26px; padding-right: 26px; outline: none"
+                  placeholder="Type new group name"
+                  v-model="newGroupTitle"
+                  :disabled="changeTitleProccess"
+                >
+              </div>
+              <button
+                class="px-5 h-10 bg-dodgerblue rounded text-white"
+                style="margin-left: 8px"
+                @click.prevent="submitNewTitle(gconversation.ray)"
+                :disabled="changeTitleProccess"
+              >
+                <svg v-if="changeTitleProccess" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-disc animate-spin" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path d="M10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 4a4 4 0 0 0-4 4 .5.5 0 0 1-1 0 5 5 0 0 1 5-5 .5.5 0 0 1 0 1zm4.5 3.5a.5.5 0 0 1 .5.5 5 5 0 0 1-5 5 .5.5 0 0 1 0-1 4 4 0 0 0 4-4 .5.5 0 0 1 .5-.5z"/>
+                </svg>
+                <span v-else>Submit</span>
+              </button>
             </div>
           </div>
         </header>
@@ -377,6 +424,9 @@ export default {
     return {
       profile: false,
       makegroup: false,
+      changeTitleGroup: false,
+      changeTitleProccess: false,
+      newGroupTitle: '',
       search: '',
       searchResults: [],
       message: ''
@@ -484,6 +534,22 @@ export default {
     joinGroup(data) {
       const storage = JSON.parse(localStorage.getItem('bearer'))
       if (storage) this.$socket.emit('joingroup', data, storage.user._id)
+    },
+    openGroupSettings(data) {
+      const storage = JSON.parse(localStorage.getItem('bearer'))
+      if (storage) {
+        const filteradm = data.is_admin.filter(dtx => dtx._id == storage.user._id)
+        if (filteradm.length > 0) return this.changeTitleGroup = true
+      }
+    },
+    submitNewTitle(data) {
+      this.changeTitleProccess = true
+      this.$socket.emit('changegrouptitle', data._id, this.newGroupTitle)
+      setTimeout(() => {
+        this.changeTitleGroup = false
+        this.changeTitleProccess = false
+        this.newGroupTitle = ''
+      }, 3000);
     },
     scrollToBot() {
       const container = this.$refs.msgContainer
