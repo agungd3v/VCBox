@@ -22,7 +22,9 @@ export default new Vuex.Store({
       status: false,
       message: '',
       background: ''
-    }
+    },
+    loadconversation: false,
+    loadlists: false
   },
   mutations: {
     initializeapp(state) {
@@ -51,6 +53,12 @@ export default new Vuex.Store({
     },
     setLists (state, value) {
       state.lists = value
+    },
+    setLoadconversation (state, value) {
+      state.loadconversation = value
+    },
+    setLoadlists (state, value) {
+      state.loadlists = value
     }
   },
   actions: {
@@ -84,6 +92,12 @@ export default new Vuex.Store({
     setLists ({ commit }, params) {
       commit('setLists', params)
     },
+    setLoadconversation({ commit }, params) {
+      commit('setLoadconversation', params)
+    },
+    setLoadlists({ commit }, params) {
+      commit('setLoadlists', params)
+    },
     logout ({ commit }, params = false) {
       if (params) {
         commit('setUser', null)
@@ -99,6 +113,8 @@ export default new Vuex.Store({
     conversation: state => JSON.parse(state.conversation),
     gconversation: state => JSON.parse(state.gconversation),
     ingroup: state => state.ingroup,
-    lists: state => state.lists
+    lists: state => state.lists,
+    loadconversation: state => state.loadconversation,
+    loadlists: state => state.loadlists
   }
 })

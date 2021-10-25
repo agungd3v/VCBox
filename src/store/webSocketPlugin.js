@@ -9,6 +9,7 @@ export default function webSocketPlugin (socket) {
     })))
     socket.on('connect', () => {
       store.dispatch('setLoader', JSON.stringify({ status: false, message: ''}))
+      store.dispatch('setLoadlists', true)
       const storage = JSON.parse(localStorage.getItem('bearer'))
       if (storage) {
         socket.emit('lists_conversation', storage.user._id)
@@ -68,7 +69,12 @@ export default function webSocketPlugin (socket) {
           store.dispatch('setGconversation', null)
           store.dispatch('setIngroup', false)
           store.dispatch('setConversation', JSON.stringify(vuex.getters.conversation))
+          store.dispatch('setLoadconversation', false)
           socket.emit("join_conversation", vuex.getters.conversation.ray._id, vuex.getters.conversation.ray)
+          setTimeout(() => {
+            const container = document.querySelectorAll('.is_message__content')
+            container[container.length - 1].scrollIntoView()
+          }, 200)
         }
         if (type == 'group') {
           if (data.message) {
@@ -76,10 +82,16 @@ export default function webSocketPlugin (socket) {
             store.dispatch('setConversation', null)
             store.dispatch('setIngroup', true)
             store.dispatch('setGconversation', JSON.stringify(vuex.getters.gconversation))
+            store.dispatch('setLoadconversation', false)
             socket.emit('join_gconversation', vuex.getters.gconversation.ray)
+            setTimeout(() => {
+              const container = document.querySelectorAll('.is_message__content')
+              container[container.length - 1].scrollIntoView()
+            }, 200)
           } else {
             store.dispatch('setConversation', null)
             store.dispatch('setIngroup', false)
+            store.dispatch('setLoadconversation', false)
           }
         }
       }
@@ -97,7 +109,7 @@ export default function webSocketPlugin (socket) {
       setTimeout(() => {
         const container = document.querySelectorAll('.is_message__content')
         container[container.length - 1].scrollIntoView()
-      }, 500)
+      }, 200)
     })
 
     socket.on('update_list_after_send_message', (data, type) => {
@@ -121,6 +133,7 @@ export default function webSocketPlugin (socket) {
 
     socket.on('lists_comming', data => {
       store.dispatch('setLists', data.message)
+      store.dispatch('setLoadlists', false)
     })
 
     socket.on('photo_changed', data => {
