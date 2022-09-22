@@ -1,0 +1,8 @@
+node_modules/
+.vscode/
+credentials/
+
+index.html
+package-lock.json
+
+.env
